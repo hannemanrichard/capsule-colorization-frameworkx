@@ -1,0 +1,35 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "npm run build && next export -o _static"
+  },
+  "dependencies": {
+    "@badrap/bar-of-progress": "^0.2.1",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@headlessui/react": "^1.6.6",
+    "@heroicons/react": "^2.0.7",
+    "@mui/material": "^5.10.10",
+    "date-fns": "^2.29.2",
+    "next": "12.1.5",
+    "react": "^18.2.0",
+    "react-date-range": "^1.4.0",
+    "react-dom": "18.0.0",
+    "react-hot-toast": "^2.3.0",
+    "react-items-carousel": "^2.8.0",
+    "tailwind-scrollbar-hide": "^1.1.7"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.8",
+    "eslint": "8.13.0",
+    "eslint-config-next": "12.1.5",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8"
+  }
+}
