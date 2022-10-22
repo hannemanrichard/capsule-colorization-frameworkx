@@ -46,15 +46,15 @@ function Sidebar() {
           <InboxStackIcon className="h-6 w-6 text-[#D4E7EE] group-hover:text-black" />
         </a>
       </div>
-      <div className="flex justify-end justify-center">
+      <div className="flex justify-center">
         <div className="mb-12">
           <a href="" className="flex justify-center p-2 mb-6">
             <Cog8ToothIcon className="h-6 w-6 text-[#D4E7EE]" />
           </a>
           <a href="" className="flex justify-center p-2">
             <img
-              class="inline-block h-12 w-12 rounded-full ring-2 ring-white/40"
-              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+              className="inline-block h-12 w-12 rounded-full ring-2 ring-white/40"
+              src="avatar.png"
               alt="Peter thiel"
             />
           </a>

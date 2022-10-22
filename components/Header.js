@@ -14,20 +14,18 @@ function Header() {
       <div className="flex-1 pl-4">
         <div className="h-full w-full flex items-center">
           <div>
-            <img src="avatar.jpg" className="h-32 w-32 rounded-lg" />
+            <img src="avatar.png" className="h-32 w-32 rounded-lg" />
           </div>
           <div className="ml-6">
             <h1 className="text-2xl font-bold tracking-widest uppercase">
-              John Scalley
+              Patient Name
             </h1>
 
             <p className="text-gray-600 mt-2 text-lg">
-              42 yo.<span className="mx-3">male</span>
-              <span>Apr 15 2022</span>
+              Age.<span className="mx-3">Gender</span>
+              <span>Date of birth</span>
             </p>
-            <p className=" text-gray-600 text-lg">
-              1901 Thornridge Cir. Shiloh, Hawaii 81063
-            </p>
+            <p className=" text-gray-600 text-lg">Street address, city</p>
           </div>
         </div>
       </div>
@@ -46,7 +44,7 @@ function Header() {
       <div className="justify-end w-40 bg-[#AEC7D0]">
         <div className="h-full w-full flex items-center">
           <div className="text-center w-full">
-            <h1 className="text-white text-3xl font-bold">11/07</h1>
+            <h1 className="text-white text-3xl font-bold">11/05</h1>
             <p className="text-white text-lg">Next visit</p>
           </div>
         </div>
