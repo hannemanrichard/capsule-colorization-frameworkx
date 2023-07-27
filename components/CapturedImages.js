@@ -1,77 +1,70 @@
+import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { sequence1 } from "../data/seq";
+import Loader from "./Loader";
 
-const images = [
-  "00001.jpg",
-  "00002.jpg",
-  "00003.jpg",
-  "00004.jpg",
-  "00005.jpg",
-  "00006.jpg",
-  "00007.jpg",
-  "00008.jpg",
-  "00009.jpg",
-  "00010.jpg",
-  "00011.jpg",
-  "00012.jpg",
-  "00013.jpg",
-  "00014.jpg",
-  "00015.jpg",
-  "00016.jpg",
-  "00017.jpg",
-  "00018.jpg",
-  "00019.jpg",
-  "00020.jpg",
-  "00021.jpg",
-  "00022.jpg",
-  "00023.jpg",
-  "00024.jpg",
-  "00025.jpg",
-  "00026.jpg",
-  "00027.jpg",
-  "00028.jpg",
-  "00029.jpg",
-  "00030.jpg",
-  "00031.jpg",
-  "00032.jpg",
-  "00033.jpg",
-  "00034.jpg",
-  "00035.jpg",
-  "00036.jpg",
-  "00037.jpg",
-  "00038.jpg",
-  "00039.jpg",
-  "00040.jpg",
-  "00041.jpg",
-  "00042.jpg",
-  "00043.jpg",
-  "00044.jpg",
-  "00045.jpg",
-  "00046.jpg",
-  "00047.jpg",
-  "00048.jpg",
-  "00049.jpg",
-  "00050.jpg",
-  "00051.jpg",
-  "00052.jpg",
-  "00053.jpg",
-  "00054.jpg",
-  "00055.jpg",
-  "00056.jpg",
-  "00057.jpg",
-  "00058.jpg",
-  "00059.jpg",
-  "00060.jpg",
-  "00061.jpg",
-  "00062.jpg",
-  "00063.jpg",
-  "00064.jpg",
-  "00065.jpg",
-  "00066.jpg",
-];
+function CapturedImages({
+  triggerColorize,
+  handleLoading,
+  handleIsColorized,
+  limit,
+}) {
+  const [currentImage, setCurrentImage] = useState("sequence1/0001.jpg");
+  const [sequence, setSequence] = useState("sequence1");
+  const [sequenceImages, setSequenceImages] = useState(sequence1);
+  const [index, setIndex] = useState(1);
+  const [currentImageIdx, setCurrentImageIdx] = useState([]);
+  const [loadingImage, setLoadingImage] = useState(false);
 
-function CapturedImages() {
-  const [currentImage, setCurrentImage] = useState("00052.jpg");
+  useEffect(() => {
+    const start = 42;
+    const end = 47;
+    // const index = 8;
+    if (triggerColorize) {
+      setLoadingImage(true);
+      handleLoading(true);
+
+      const intervalId = setInterval(() => fetchImages(start, end), 5000);
+
+      if (index > limit) {
+        clearInterval(intervalId);
+        setLoadingImage(false);
+        handleLoading(false);
+        handleIsColorized(true);
+      }
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [index, triggerColorize, limit]);
+
+  const fetchImages = async (start, end) => {
+    try {
+      // setLoadingImage(true);
+      setCurrentImageIdx([start - index, end + index]);
+      const res = await axios.post("/api/", {
+        seq: "sequence1",
+        idx: index,
+      });
+      const newSequence = [...sequenceImages];
+
+      newSequence[start - index] = res.data.start;
+      newSequence[end + index] = res.data.end;
+
+      setSequenceImages(newSequence);
+      const newIndex = index + 1;
+      setIndex(newIndex);
+      setLoadingImage(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const isExternalUrl = (input) => {
+    return input.slice(0, 4) === "http";
+  };
+
   return (
     <>
       <div className="w-3/5 p-6">
@@ -80,12 +73,30 @@ function CapturedImages() {
         </div>
         <div className="h-3/4 overflow-scroll scrollbar-hide">
           <div className="grid grid-cols-8 gap-1">
-            {images.map((image, key) => (
-              <div className="cursor-pointer" key={key}>
+            {sequenceImages.map((image, key) => (
+              <div className="cursor-pointer relative" key={key}>
                 <img
-                  src={`capsule/${image}`}
+                  src={
+                    isExternalUrl(image)
+                      ? image
+                      : `capsule/${sequence}/${image}`
+                  }
                   onClick={() => setCurrentImage(image)}
                 />
+                {currentImageIdx.includes(key) && loadingImage && (
+                  <div
+                    style={{
+                      background: "rgba(0, 0, 0, 0.5)",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <Loader />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -97,11 +108,12 @@ function CapturedImages() {
             <h1 className="font-bold text-gray-600">Preview Image</h1>
           </div>
           <div className="p-4 pb-0">
-            <img className="w-full h-full" src={`capsule/${currentImage}`} />
+            <img
+              className="w-full h-full"
+              // src={`capsule/${sequence}/${currentImage}`}
+              src={`capsule/${sequence}/${sequenceImages[43]}`}
+            />
           </div>
-          <p className="p-4 font-bold text-gray-600 text-center">
-            Image: {currentImage}
-          </p>
         </div>
       </div>
     </>
