@@ -63,7 +63,7 @@ export default function Home() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="How to use this app?">
-          {"Use Google's location service?"}
+          {"How to use this app?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
