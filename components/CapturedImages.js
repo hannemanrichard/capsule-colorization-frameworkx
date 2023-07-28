@@ -2,6 +2,7 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
+import { Alert } from "@mui/material";
 
 function CapturedImages({
   triggerColorize,
@@ -20,17 +21,22 @@ function CapturedImages({
   const [loadingImage, setLoadingImage] = useState(false);
   const [start, setStart] = useState(42);
   const [end, setEnd] = useState(47);
+  const [loading, setLoading] = useState(false);
+  const [loadingEmergency, setLoadingEmergency] = useState(true);
 
   useEffect(() => {
     // const index = 8;
     if (triggerColorize) {
       setLoadingImage(true);
       handleLoading(true);
-
+      setLoading(true);
       const intervalId = setInterval(() => fetchImages(), 1000);
       console.log(currentImageIdx);
       console.log("is start: ", currentImageIdx[0] < 0);
       console.log("is end: ", currentImageIdx[1] > sequenceImages.length - 1);
+      if (index > limit) {
+        setLoadingEmergency(false);
+      }
       if (
         // index > 5
         currentImageIdx[0] < 0 ||
@@ -39,6 +45,7 @@ function CapturedImages({
         clearInterval(intervalId);
         setLoadingImage(false);
         handleLoading(false);
+        setLoading(false);
         handleIsColorized(true);
       }
       return () => {
@@ -109,6 +116,16 @@ function CapturedImages({
         <div className="bg-[#E5E8EC] p-4 mb-4">
           <h1 className="font-bold text-gray-600">Captured images</h1>
         </div>
+        {loading && loadingEmergency && (
+          <Alert severity="info" className="mt-4 mb-4" color="warning">
+            Colorizing emergency in progress!
+          </Alert>
+        )}
+        {loading && !loadingEmergency && (
+          <Alert severity="info" className="mt-4 mb-4" color="info">
+            Colorizing rest of sequence in progress!
+          </Alert>
+        )}
         <div className="h-3/4 overflow-scroll scrollbar-hide">
           <div className="grid grid-cols-8 gap-1">
             {sequenceImages.map((image, key) => (

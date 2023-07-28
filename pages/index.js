@@ -3,6 +3,13 @@ import { getDownloadURL, ref } from "firebase/storage";
 
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { styled } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import Sequence from "../components/Sequence";
 import CapturedImages from "../components/CapturedImages";
 import supabase, { storage } from "../firebase-config";
@@ -10,6 +17,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { sequence1, sequence2, sequence3 } from "../data/seq";
+
 export default function Home() {
   const [triggerColorize, setTriggerColorize] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,6 +26,12 @@ export default function Home() {
   const [selectedSequence, setSelectedSequence] = useState("sequence1");
   const [selectedSequenceImages, setSelectedSequenceImages] =
     useState(sequence1);
+  const [open, setOpen] = useState(true);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleIsColorized = (newValue) => {
     setIsColorized(newValue);
   };
@@ -42,6 +56,30 @@ export default function Home() {
 
   return (
     <div className="flex">
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="How to use this app?">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Step 1 - Choose a sequence
+          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            Step 2 - Choose an emergency image number
+          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            Step 3 - Click colorize
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Continue</Button>
+        </DialogActions>
+      </Dialog>
       {/* Sidebar */}
       <Sidebar />
       {/* Content */}

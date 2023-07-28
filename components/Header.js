@@ -53,10 +53,19 @@ function Header({
         </div>
       </div>
       <div className="w-2/5 p-4 bg-[#D4E7EE]">
-        <p className="mb-3 text-gray-700">Choose a sequence:</p>
-
+        <p className="mb-3 text-gray-700">
+          choose the number of emergency images and the sequence:
+        </p>
+        <input
+          type="number"
+          className="p-4 w-24"
+          value={limit}
+          onChange={(e) => handleLimit(e.target.value)}
+          max={10}
+          placeholder="eg. 3"
+        />
         <select
-          className="p-4"
+          className="p-4 mb-2"
           value={sequence}
           onChange={(e) => handleSequenceChange(e.target.value)}
         >
@@ -71,11 +80,7 @@ function Header({
           {loading && <Spinner />}
           colorize
         </button>
-        {loading && (
-          <Alert severity="info" className="mt-4" color="info">
-            Colorizing sequence in progress!
-          </Alert>
-        )}
+
         {/* {isColorized && (
           <Alert severity="success" className="mt-4" color="success">
             The images have been successfully colorized!
