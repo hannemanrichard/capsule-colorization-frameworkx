@@ -45,7 +45,15 @@ function CapturedImages({
         clearInterval(intervalId);
       };
     }
-  }, [index, triggerColorize, limit, start, end, currentImageIdx]);
+  }, [
+    index,
+    triggerColorize,
+    limit,
+    start,
+    end,
+    currentImageIdx,
+    sequenceImages,
+  ]);
 
   useEffect(() => {
     setSequenceImages(selectedSequenceImages);
