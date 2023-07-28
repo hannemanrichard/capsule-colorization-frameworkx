@@ -85,6 +85,7 @@ function Header({
           <Alert severity="success" className="mt-4" color="success">
             The images have been successfully colorized!
           </Alert>
+          
         )} */}
       </div>
       <div className="justify-end w-40 bg-[#AEC7D0]">
