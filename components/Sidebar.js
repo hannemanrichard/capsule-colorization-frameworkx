@@ -18,7 +18,7 @@ function Sidebar() {
       </div>
       {/* Menu */}
       <div className="w-full mt-10 flex-1">
-        <a
+        {/* <a
           href=""
           className="flex justify-center py-6 hover:bg-[#D9D9D9] group"
         >
@@ -29,11 +29,11 @@ function Sidebar() {
           className="flex justify-center py-6 hover:bg-[#D9D9D9] group"
         >
           <CalendarIcon className="h-6 w-6 text-[#D4E7EE] group-hover:text-black" />
-        </a>
+        </a> */}
         <a href="" className="flex justify-center py-6 bg-[#D9D9D9] group">
           <FolderOpenIcon className="h-6 w-6 text-black" />
         </a>
-        <a
+        {/* <a
           href=""
           className="flex justify-center py-6 hover:bg-[#D9D9D9] group"
         >
@@ -44,7 +44,7 @@ function Sidebar() {
           className="flex justify-center py-6 hover:bg-[#D9D9D9] group"
         >
           <InboxStackIcon className="h-6 w-6 text-[#D4E7EE] group-hover:text-black" />
-        </a>
+        </a> */}
       </div>
       <div className="flex justify-center">
         <div className="mb-12">

@@ -9,15 +9,27 @@ import {
 import Alert from "@mui/material/Alert";
 import Spinner from "./Spinner";
 
+import { sequence1, sequence2, sequence3 } from "../data/seq";
 function Header({
   onTriggerColorize,
   loading,
   isColorized,
   handleLimit,
   limit,
+  sequence,
+  onSequenceChange,
 }) {
   const handleColorizeTrigger = () => {
     onTriggerColorize(true);
+  };
+
+  const handleSequenceChange = (newVal) => {
+    let newSequence;
+    if (newVal === "sequence1") newSequence = sequence1;
+    if (newVal === "sequence2") newSequence = sequence2;
+    if (newVal === "sequence3") newSequence = sequence3;
+
+    onSequenceChange(newVal, newSequence);
   };
 
   return (
@@ -41,17 +53,17 @@ function Header({
         </div>
       </div>
       <div className="w-2/5 p-4 bg-[#D4E7EE]">
-        <p className="mb-3 text-gray-700">
-          Number of emergency images to colorize:
-        </p>
-        <input
-          type="number"
-          value={limit}
-          onChange={(e) => handleLimit(e.target.value)}
-          max={10}
+        <p className="mb-3 text-gray-700">Choose a sequence:</p>
+
+        <select
           className="p-4"
-          placeholder="eg. 3"
-        />
+          value={sequence}
+          onChange={(e) => handleSequenceChange(e.target.value)}
+        >
+          <option value={"sequence1"}>Angiectasia 04a7 2669-2768</option>
+          <option value={"sequence2"}>Angiectasia 04a7 4717-4816</option>
+          <option value={"sequence3"}>Ulcer 2fc3 1670-1770</option>
+        </select>
         <button
           onClick={handleColorizeTrigger}
           className="p-4 w-40 uppercase font-bold hover:bg-gray-600 bg-black text-white"
@@ -64,11 +76,11 @@ function Header({
             Colorizing sequence in progress!
           </Alert>
         )}
-        {isColorized && (
+        {/* {isColorized && (
           <Alert severity="success" className="mt-4" color="success">
             The images have been successfully colorized!
           </Alert>
-        )}
+        )} */}
       </div>
       <div className="justify-end w-40 bg-[#AEC7D0]">
         <div className="h-full w-full flex items-center">

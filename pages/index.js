@@ -9,12 +9,15 @@ import supabase, { storage } from "../firebase-config";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import { sequence1, sequence2, sequence3 } from "../data/seq";
 export default function Home() {
   const [triggerColorize, setTriggerColorize] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isColorized, setIsColorized] = useState(false);
   const [limit, setLimit] = useState(5);
-
+  const [selectedSequence, setSelectedSequence] = useState("sequence1");
+  const [selectedSequenceImages, setSelectedSequenceImages] =
+    useState(sequence1);
   const handleIsColorized = (newValue) => {
     setIsColorized(newValue);
   };
@@ -31,6 +34,12 @@ export default function Home() {
     setLimit(newValue);
   };
 
+  const handleSequenceChange = (newVal, newSeq) => {
+    setSelectedSequence(newVal);
+    setSelectedSequenceImages(newSeq);
+    // console.log(newSeq);
+  };
+
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -43,6 +52,8 @@ export default function Home() {
           onTriggerColorize={handleTriggerColorizeChange}
           handleLimit={handleLimitChange}
           limit={limit}
+          sequence={selectedSequence}
+          onSequenceChange={handleSequenceChange}
         />
         <div className="flex">
           <CapturedImages
@@ -50,6 +61,9 @@ export default function Home() {
             triggerColorize={triggerColorize}
             handleIsColorized={handleIsColorized}
             limit={limit}
+            selectedSequence={selectedSequence}
+            selectedSequenceImages={selectedSequenceImages}
+            selectedSequenceChange={handleSequenceChange}
           />
         </div>
         {/* <Sequence /> */}

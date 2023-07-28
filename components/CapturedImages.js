@@ -1,7 +1,6 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { sequence1 } from "../data/seq";
 import Loader from "./Loader";
 
 function CapturedImages({
@@ -9,25 +8,34 @@ function CapturedImages({
   handleLoading,
   handleIsColorized,
   limit,
+  selectedSequence,
+  selectedSequenceImages,
+  selectedSequenceChange,
 }) {
-  const [currentImage, setCurrentImage] = useState("sequence1/0001.jpg");
-  const [sequence, setSequence] = useState("sequence1");
-  const [sequenceImages, setSequenceImages] = useState(sequence1);
+  const [currentImage, setCurrentImage] = useState(`0001.jpg`);
+  const [sequence, setSequence] = useState(selectedSequence);
+  const [sequenceImages, setSequenceImages] = useState(selectedSequenceImages);
   const [index, setIndex] = useState(1);
   const [currentImageIdx, setCurrentImageIdx] = useState([]);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [start, setStart] = useState(42);
+  const [end, setEnd] = useState(47);
 
   useEffect(() => {
-    const start = 42;
-    const end = 47;
     // const index = 8;
     if (triggerColorize) {
       setLoadingImage(true);
       handleLoading(true);
 
-      const intervalId = setInterval(() => fetchImages(start, end), 5000);
-
-      if (index > limit) {
+      const intervalId = setInterval(() => fetchImages(), 1000);
+      console.log(currentImageIdx);
+      console.log("is start: ", currentImageIdx[0] < 0);
+      console.log("is end: ", currentImageIdx[1] > sequenceImages.length - 1);
+      if (
+        // index > 5
+        currentImageIdx[0] < 0 ||
+        currentImageIdx[1] > sequenceImages.length - 1
+      ) {
         clearInterval(intervalId);
         setLoadingImage(false);
         handleLoading(false);
@@ -37,15 +45,37 @@ function CapturedImages({
         clearInterval(intervalId);
       };
     }
-  }, [index, triggerColorize, limit]);
+  }, [index, triggerColorize, limit, start, end, currentImageIdx]);
 
-  const fetchImages = async (start, end) => {
+  useEffect(() => {
+    setSequenceImages(selectedSequenceImages);
+    setSequence(selectedSequence);
+    if (selectedSequence === "sequence3") {
+      setStart(51);
+      setEnd(68);
+    }
+    if (selectedSequence === "sequence2") {
+      setStart(40);
+      setEnd(45);
+    }
+
+    if (selectedSequence === "sequence1") {
+      setStart(42);
+      setEnd(47);
+    }
+  }, [selectedSequenceImages, selectedSequence]);
+  const fetchImages = async () => {
     try {
       // setLoadingImage(true);
       setCurrentImageIdx([start - index, end + index]);
+      const isStart = start - index < 0;
+      const isEnd = end + index > sequenceImages.length - 1;
+
       const res = await axios.post("/api/", {
-        seq: "sequence1",
+        seq: selectedSequence,
         idx: index,
+        iss: isStart,
+        ise: isEnd,
       });
       const newSequence = [...sequenceImages];
 
@@ -62,7 +92,7 @@ function CapturedImages({
   };
 
   const isExternalUrl = (input) => {
-    return input.slice(0, 4) === "http";
+    return input && input.slice(0, 4) === "http";
   };
 
   return (
@@ -74,30 +104,41 @@ function CapturedImages({
         <div className="h-3/4 overflow-scroll scrollbar-hide">
           <div className="grid grid-cols-8 gap-1">
             {sequenceImages.map((image, key) => (
-              <div className="cursor-pointer relative" key={key}>
-                <img
-                  src={
-                    isExternalUrl(image)
-                      ? image
-                      : `capsule/${sequence}/${image}`
-                  }
-                  onClick={() => setCurrentImage(image)}
-                />
-                {currentImageIdx.includes(key) && loadingImage && (
-                  <div
-                    style={{
-                      background: "rgba(0, 0, 0, 0.5)",
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                    }}
-                  >
-                    <Loader />
+              <>
+                {image && (
+                  <div className="cursor-pointer relative" key={key}>
+                    {key >= 0 && key <= sequenceImages.length - 1 && (
+                      <img
+                        src={
+                          isExternalUrl(image)
+                            ? image
+                            : `capsule/${sequence}/${image}`
+                        }
+                        className={`border-4 ${
+                          key >= start && key <= end
+                            ? "border-red-500"
+                            : "border-gray-100"
+                        }`}
+                        onClick={() => setCurrentImage(image)}
+                      />
+                    )}
+                    {currentImageIdx.includes(key) && loadingImage && (
+                      <div
+                        style={{
+                          background: "rgba(0, 0, 0, 0.5)",
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                        }}
+                      >
+                        <Loader />
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
+              </>
             ))}
           </div>
         </div>
@@ -109,9 +150,13 @@ function CapturedImages({
           </div>
           <div className="p-4 pb-0">
             <img
-              className="w-full h-full"
-              // src={`capsule/${sequence}/${currentImage}`}
-              src={`capsule/${sequence}/${sequenceImages[43]}`}
+              className={`w-full h-full`}
+              src={
+                isExternalUrl(currentImage)
+                  ? currentImage
+                  : `capsule/${sequence}/${currentImage}`
+              }
+              // src={`capsule/${sequence}/${sequenceImages[43]}`}
             />
           </div>
         </div>
