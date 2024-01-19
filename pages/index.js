@@ -31,8 +31,8 @@ export default function Home() {
     console.log("loading", loading);
     console.log("trigger", triggerColorize);
     console.log("is colorized", isColorized);
-    console.log("selected sequence", selectedSequence);
-    console.log("selected sequence images", selectedSequenceImages);
+    // console.log("selected sequence", selectedSequence);
+    // console.log("selected sequence images", selectedSequenceImages);
   }, [
     loading,
     isColorized,

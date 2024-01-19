@@ -34,10 +34,10 @@ function CapturedImages({
       handleLoading(true);
       setLoading(true);
       const intervalId = setInterval(() => fetchImages(), 1000);
-      console.log("index =>", index);
-      console.log("[start, end] =>", currentImageIdx);
-      console.log("is start: ", currentImageIdx[0] < 0);
-      console.log("is end: ", currentImageIdx[1] > sequenceImages.length - 1);
+      // console.log("index =>", index);
+      // console.log("[start, end] =>", currentImageIdx);
+      // console.log("is start: ", currentImageIdx[0] < 0);
+      // console.log("is end: ", currentImageIdx[1] > sequenceImages.length - 1);
       if (index > limit) {
         setLoadingEmergency(false);
       }
@@ -111,19 +111,22 @@ function CapturedImages({
       setCurrentImageIdx([start - index, end + index]);
       const isStart = start - index < 0;
       const isEnd = end + index > sequenceImages.length - 1;
-      console.log("start: ", isStart);
-      console.log("isEnd:", isEnd);
-      const res = await axios.post("/api/", {
-        seq: selectedSequence,
-        idx: index,
-        iss: isStart,
-        ise: isEnd,
-      });
+      // console.log("start: ", isStart);
+      // console.log("isEnd:", isEnd);
+      const res = await axios.post(
+        "https://capsule-colorization-framework.vercel.app/api/",
+        {
+          seq: selectedSequence,
+          idx: index,
+          iss: isStart,
+          ise: isEnd,
+        }
+      );
       const newSequence = [...sequenceImages];
 
       newSequence[start - index] = res.data.start;
       newSequence[end + index] = res.data.end;
-      console.log(`start: ${res.data.start}, end: ${res.data.end}`);
+      // console.log(`start: ${res.data.start}, end: ${res.data.end}`);
       setSequenceImages(newSequence);
       const newIndex = index + 1;
       setIndex(newIndex);
