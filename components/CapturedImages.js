@@ -38,9 +38,9 @@ function CapturedImages({
       console.log("[start, end] =>", currentImageIdx);
       console.log("is start: ", currentImageIdx[0] < 0);
       console.log("is end: ", currentImageIdx[1] > sequenceImages.length - 1);
-      // if (index > limit) {
-      //   setLoadingEmergency(false);
-      // }
+      if (index > limit) {
+        setLoadingEmergency(false);
+      }
       if (
         // index > 5
         currentImageIdx[0] < 0 &&
