@@ -178,9 +178,9 @@ export const sequence2 = [
   "0085.jpg",
   "0086.jpg",
   "0087.jpg",
-  "0088.jpg",
-  "0089.jpg",
-  "0090.jpg",
+  // "0088.jpg",
+  // "0089.jpg",
+  // "0090.jpg",
 ];
 
 export const sequence3 = [

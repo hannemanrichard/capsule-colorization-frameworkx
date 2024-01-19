@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { Alert } from "@mui/material";
+import { RotatingLines } from "react-loader-spinner";
 
 function CapturedImages({
   triggerColorize,
@@ -11,6 +12,8 @@ function CapturedImages({
   limit,
   selectedSequence,
   selectedSequenceImages,
+  onTriggerColorize,
+  onIsColorizedChange,
   selectedSequenceChange,
 }) {
   const [currentImage, setCurrentImage] = useState(`0001.jpg`);
@@ -31,15 +34,16 @@ function CapturedImages({
       handleLoading(true);
       setLoading(true);
       const intervalId = setInterval(() => fetchImages(), 1000);
-      console.log(currentImageIdx);
+      console.log("index =>", index);
+      console.log("[start, end] =>", currentImageIdx);
       console.log("is start: ", currentImageIdx[0] < 0);
       console.log("is end: ", currentImageIdx[1] > sequenceImages.length - 1);
-      if (index > limit) {
-        setLoadingEmergency(false);
-      }
+      // if (index > limit) {
+      //   setLoadingEmergency(false);
+      // }
       if (
         // index > 5
-        currentImageIdx[0] < 0 ||
+        currentImageIdx[0] < 0 &&
         currentImageIdx[1] > sequenceImages.length - 1
       ) {
         clearInterval(intervalId);
@@ -47,8 +51,14 @@ function CapturedImages({
         handleLoading(false);
         setLoading(false);
         handleIsColorized(true);
+        setIndex(1);
+        // onTriggerColorize(false);
+        console.log(loading);
+        console.log("is ending...");
       }
       return () => {
+        // setIndex(1);
+        console.log("ended");
         clearInterval(intervalId);
       };
     }
@@ -63,29 +73,46 @@ function CapturedImages({
   ]);
 
   useEffect(() => {
+    if (triggerColorize) {
+      if (
+        // index > 5
+        currentImageIdx[0] < 0 &&
+        currentImageIdx[1] > sequenceImages.length - 1
+      ) {
+        onTriggerColorize(false);
+      }
+    }
+  }, [currentImageIdx]);
+
+  useEffect(() => {
     setSequenceImages(selectedSequenceImages);
     setSequence(selectedSequence);
+    setIndex(1);
     if (selectedSequence === "sequence3") {
       setStart(51);
       setEnd(68);
+      setCurrentImageIdx([51 - index, 68 + index]);
     }
     if (selectedSequence === "sequence2") {
       setStart(40);
       setEnd(45);
+      setCurrentImageIdx([40 - index, 45 + index]);
     }
 
     if (selectedSequence === "sequence1") {
       setStart(42);
       setEnd(47);
+      setCurrentImageIdx([42 - index, 47 + index]);
     }
-  }, [selectedSequenceImages, selectedSequence]);
+  }, [selectedSequenceImages, selectedSequence, onTriggerColorize]);
   const fetchImages = async () => {
     try {
       // setLoadingImage(true);
       setCurrentImageIdx([start - index, end + index]);
       const isStart = start - index < 0;
       const isEnd = end + index > sequenceImages.length - 1;
-
+      console.log("start: ", isStart);
+      console.log("isEnd:", isEnd);
       const res = await axios.post("/api/", {
         seq: selectedSequence,
         idx: index,
@@ -96,7 +123,7 @@ function CapturedImages({
 
       newSequence[start - index] = res.data.start;
       newSequence[end + index] = res.data.end;
-
+      console.log(`start: ${res.data.start}, end: ${res.data.end}`);
       setSequenceImages(newSequence);
       const newIndex = index + 1;
       setIndex(newIndex);
@@ -111,9 +138,27 @@ function CapturedImages({
   };
 
   return (
-    <>
-      <div className="w-3/5 p-6">
-        <div className="bg-[#E5E8EC] p-4 mb-4">
+    <div className="lg:ml-20 lg:mr-20 lg:mx-4 md:flex">
+      <div className="w-full md:w-1/5 md:px-2 p-6">
+        <div className="">
+          <div className="p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 bg-gray-100 ">
+            <h1 className="font-bold text-gray-600">Preview Image</h1>
+          </div>
+          <div className="p-4 border border-gray-200">
+            <img
+              className={`w-full h-full`}
+              src={
+                isExternalUrl(currentImage)
+                  ? currentImage
+                  : `capsule/${sequence}/${currentImage}`
+              }
+              // src={`capsule/${sequence}/${sequenceImages[43]}`}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="w-full md:w-4/5 p-6">
+        <div className="w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 bg-gray-100 ">
           <h1 className="font-bold text-gray-600">Captured images</h1>
         </div>
         {loading && loadingEmergency && (
@@ -126,8 +171,8 @@ function CapturedImages({
             Colorizing rest of sequence in progress!
           </Alert>
         )}
-        <div className="h-3/4 overflow-scroll scrollbar-hide">
-          <div className="grid grid-cols-8 gap-1">
+        <div className="h-3/4 overflow-scroll scrollbar-hide p-5 border  border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+          <div className="grid md:grid-cols-6 sm:grid-cols-3 grid-cols-2 lg:grid-cols-12 gap-1">
             {sequenceImages.map((image, key) => (
               <>
                 {image && (
@@ -158,7 +203,20 @@ function CapturedImages({
                           bottom: 0,
                         }}
                       >
-                        <Loader />
+                        <div className="flex h-full justify-center items-center">
+                          <RotatingLines
+                            visible={true}
+                            height="32"
+                            width="32"
+                            strokeColor="#fff"
+                            strokeWidth="4"
+                            animationDuration="0.75"
+                            ariaLabel="rotating-lines-loading"
+                            // style={}
+                            wrapperStyle={{ top: "10px", left: "10px" }}
+                            wrapperClass="ro"
+                          />
+                        </div>
                       </div>
                     )}
                   </div>
@@ -168,25 +226,7 @@ function CapturedImages({
           </div>
         </div>
       </div>
-      <div className="w-2/5 p-6">
-        <div className="bg-[#F8F8F8]">
-          <div className="bg-[#D4E7EE] p-4 mb-2">
-            <h1 className="font-bold text-gray-600">Preview Image</h1>
-          </div>
-          <div className="p-4 pb-0">
-            <img
-              className={`w-full h-full`}
-              src={
-                isExternalUrl(currentImage)
-                  ? currentImage
-                  : `capsule/${sequence}/${currentImage}`
-              }
-              // src={`capsule/${sequence}/${sequenceImages[43]}`}
-            />
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
 

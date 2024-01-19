@@ -27,7 +27,19 @@ export default function Home() {
   const [selectedSequenceImages, setSelectedSequenceImages] =
     useState(sequence1);
   const [open, setOpen] = useState(true);
-
+  useEffect(() => {
+    console.log("loading", loading);
+    console.log("trigger", triggerColorize);
+    console.log("is colorized", isColorized);
+    console.log("selected sequence", selectedSequence);
+    console.log("selected sequence images", selectedSequenceImages);
+  }, [
+    loading,
+    isColorized,
+    selectedSequence,
+    selectedSequenceImages,
+    triggerColorize,
+  ]);
   const handleClose = () => {
     setOpen(false);
   };
@@ -51,6 +63,7 @@ export default function Home() {
   const handleSequenceChange = (newVal, newSeq) => {
     setSelectedSequence(newVal);
     setSelectedSequenceImages(newSeq);
+    setIsColorized(false);
     // console.log(newSeq);
   };
 
@@ -81,9 +94,12 @@ export default function Home() {
         </DialogActions>
       </Dialog>
       {/* Sidebar */}
-      <Sidebar />
+      {/* <Sidebar /> */}
       {/* Content */}
-      <div className="w-full ml-32 min-h-screen">
+      <div className="w-full min-h-screen">
+        <h1 className="text-2xl font-bold tracking-widest uppercase text-center py-8">
+          Colorization Framework
+        </h1>
         <Header
           loading={loading}
           isColorized={isColorized}
@@ -97,6 +113,7 @@ export default function Home() {
           <CapturedImages
             handleLoading={handleLoading}
             triggerColorize={triggerColorize}
+            onTriggerColorize={handleTriggerColorizeChange}
             handleIsColorized={handleIsColorized}
             limit={limit}
             selectedSequence={selectedSequence}

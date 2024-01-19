@@ -28,6 +28,7 @@
     "react-dom": "18.0.0",
     "react-hot-toast": "^2.3.0",
     "react-items-carousel": "^2.8.0",
+    "react-loader-spinner": "^6.1.6",
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
