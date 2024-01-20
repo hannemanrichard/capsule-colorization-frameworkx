@@ -113,12 +113,15 @@ function CapturedImages({
       const isEnd = end + index > sequenceImages.length - 1;
       // console.log("start: ", isStart);
       // console.log("isEnd:", isEnd);
-      const res = await axios.post("/api/", {
-        seq: selectedSequence,
-        idx: index,
-        iss: isStart,
-        ise: isEnd,
-      });
+      const res = await axios.post(
+        "https://capsule-colorization-framework.vercel.app/api/",
+        {
+          seq: selectedSequence,
+          idx: index,
+          iss: isStart,
+          ise: isEnd,
+        }
+      );
       const newSequence = [...sequenceImages];
 
       newSequence[start - index] = res.data.start;
