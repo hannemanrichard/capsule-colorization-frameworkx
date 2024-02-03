@@ -98,7 +98,7 @@ export default function Home() {
       {/* Content */}
       <div className="w-full min-h-screen">
         <h1 className="text-2xl font-bold tracking-widest uppercase text-center py-8">
-          Colorization Framework
+          Wireless Capsule Endoscopy Colorization framework
         </h1>
         <Header
           loading={loading}
