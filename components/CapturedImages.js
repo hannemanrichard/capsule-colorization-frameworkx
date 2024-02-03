@@ -33,7 +33,7 @@ function CapturedImages({
       setLoadingImage(true);
       handleLoading(true);
       setLoading(true);
-      const intervalId = setInterval(() => fetchImages(), 1000);
+      const intervalId = setInterval(() => fetchImages(), 300);
       // console.log("index =>", index);
       // console.log("[start, end] =>", currentImageIdx);
       // console.log("is start: ", currentImageIdx[0] < 0);
@@ -88,6 +88,12 @@ function CapturedImages({
     setSequenceImages(selectedSequenceImages);
     setSequence(selectedSequence);
     setIndex(1);
+    if (selectedSequence === "sequence4") {
+      setStart(50);
+      setEnd(69);
+
+      setCurrentImageIdx([50 - index, 69 + index]);
+    }
     if (selectedSequence === "sequence3") {
       setStart(51);
       setEnd(68);

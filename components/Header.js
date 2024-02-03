@@ -9,7 +9,7 @@ import {
 import Alert from "@mui/material/Alert";
 import Spinner from "./Spinner";
 
-import { sequence1, sequence2, sequence3 } from "../data/seq";
+import { sequence1, sequence2, sequence3, sequence4 } from "../data/seq";
 function Header({
   onTriggerColorize,
   loading,
@@ -29,6 +29,7 @@ function Header({
     if (newVal === "sequence1") newSequence = sequence1;
     if (newVal === "sequence2") newSequence = sequence2;
     if (newVal === "sequence3") newSequence = sequence3;
+    if (newVal === "sequence4") newSequence = sequence4;
 
     onSequenceChange(newVal, newSequence);
   };
@@ -68,9 +69,10 @@ function Header({
             disabled={loading}
             onChange={(e) => handleSequenceChange(e.target.value)}
           >
-            <option value={"sequence1"}>Angiectasia 04a7 2669-2768</option>
-            <option value={"sequence2"}>Angiectasia 04a7 4717-4816</option>
-            <option value={"sequence3"}>Ulcer 2fc3 1670-1770</option>
+            <option value={"sequence1"}>Sequence 1</option>
+            <option value={"sequence2"}>Sequence 2</option>
+            <option value={"sequence3"}>Sequence 3</option>
+            <option value={"sequence4"}>Sequence 4</option>
           </select>
         </div>
 

@@ -1,5 +1,5 @@
 import supabase, { storage } from "../../firebase-config";
-import { sequence1, sequence2, sequence3 } from "../../data/seq";
+import { sequence1, sequence2, sequence3, sequence4 } from "../../data/seq";
 import { getDownloadURL, ref } from "firebase/storage";
 
 export default async function handler(req, res) {
@@ -25,6 +25,10 @@ export default async function handler(req, res) {
     selectedSequence = sequence3;
     start = 51;
     end = 68;
+  } else if (sequence === "sequence4") {
+    selectedSequence = sequence4;
+    start = 50;
+    end = 69;
   }
   try {
     const pathRefStart = ref(
@@ -35,6 +39,7 @@ export default async function handler(req, res) {
       storage,
       `${sequence}/${selectedSequence[end + index]}`
     );
+
     const startUrl = isStart ? null : await getDownloadURL(pathRefStart);
     const endUrl = isEnd ? null : await getDownloadURL(pathRefEnd);
 
